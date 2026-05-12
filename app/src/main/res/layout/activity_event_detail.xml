@@ -5,6 +5,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/screenBackground"
     tools:context=".EventDetailActivity">
 
     <com.google.android.material.appbar.AppBarLayout
@@ -12,15 +13,15 @@
         android:layout_height="wrap_content"
         android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
 
-            <androidx.appcompat.widget.Toolbar
+        <androidx.appcompat.widget.Toolbar
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
             android:background="@color/colorPrimary"
+            app:menu="@menu/main_menu"
             app:navigationIcon="?attr/homeAsUpIndicator"
             app:title="Детали события"
-            app:titleTextColor="@android:color/white"
-            app:menu="@menu/main_menu"/>
+            app:titleTextColor="@android:color/white" />
 
     </com.google.android.material.appbar.AppBarLayout>
 
@@ -35,11 +36,11 @@
             android:orientation="vertical"
             android:padding="16dp">
 
-            <!-- Название события -->
             <com.google.android.material.card.MaterialCardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
+                app:cardBackgroundColor="@color/cardBackground"
                 app:cardCornerRadius="8dp"
                 app:cardElevation="2dp">
 
@@ -53,7 +54,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="Название"
-                        android:textColor="@android:color/darker_gray"
+                        android:textColor="@color/darker_gray"
                         android:textSize="12sp" />
 
                     <TextView
@@ -70,11 +71,11 @@
 
             </com.google.android.material.card.MaterialCardView>
 
-            <!-- Дата и время -->
             <com.google.android.material.card.MaterialCardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
+                app:cardBackgroundColor="@color/cardBackground"
                 app:cardCornerRadius="8dp"
                 app:cardElevation="2dp">
 
@@ -88,7 +89,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="Дата и время"
-                        android:textColor="@android:color/darker_gray"
+                        android:textColor="@color/darker_gray"
                         android:textSize="12sp" />
 
                     <LinearLayout
@@ -108,7 +109,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:textSize="14sp"
-                            tools:text="дд.мм.гг, время" />
+                            tools:text="12.05.2026 10:00" />
 
                     </LinearLayout>
 
@@ -116,11 +117,11 @@
 
             </com.google.android.material.card.MaterialCardView>
 
-            <!-- Место проведения -->
             <com.google.android.material.card.MaterialCardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
+                app:cardBackgroundColor="@color/cardBackground"
                 app:cardCornerRadius="8dp"
                 app:cardElevation="2dp">
 
@@ -134,7 +135,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="Место проведения"
-                        android:textColor="@android:color/darker_gray"
+                        android:textColor="@color/darker_gray"
                         android:textSize="12sp" />
 
                     <LinearLayout
@@ -162,11 +163,11 @@
 
             </com.google.android.material.card.MaterialCardView>
 
-            <!-- Организатор -->
             <com.google.android.material.card.MaterialCardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
+                app:cardBackgroundColor="@color/cardBackground"
                 app:cardCornerRadius="8dp"
                 app:cardElevation="2dp">
 
@@ -180,7 +181,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="Организатор"
-                        android:textColor="@android:color/darker_gray"
+                        android:textColor="@color/darker_gray"
                         android:textSize="12sp" />
 
                     <LinearLayout
@@ -193,14 +194,14 @@
                             android:layout_width="20dp"
                             android:layout_height="20dp"
                             android:layout_marginEnd="8dp"
-                            android:src="@android:drawable/ic_menu_myplaces"/>
+                            android:src="@android:drawable/ic_menu_myplaces" />
 
                         <TextView
                             android:id="@+id/tvDetailOrganizer"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:textSize="14sp"
-                            tools:text="ФИО, и кафедра" />
+                            tools:text="ФИО, кафедра" />
 
                     </LinearLayout>
 
@@ -208,11 +209,11 @@
 
             </com.google.android.material.card.MaterialCardView>
 
-            <!-- Описание -->
             <com.google.android.material.card.MaterialCardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
+                app:cardBackgroundColor="@color/cardBackground"
                 app:cardCornerRadius="8dp"
                 app:cardElevation="2dp">
 
@@ -226,7 +227,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="Описание"
-                        android:textColor="@android:color/darker_gray"
+                        android:textColor="@color/darker_gray"
                         android:textSize="12sp" />
 
                     <TextView
@@ -240,8 +241,6 @@
                 </LinearLayout>
 
             </com.google.android.material.card.MaterialCardView>
-
-
 
         </LinearLayout>
 

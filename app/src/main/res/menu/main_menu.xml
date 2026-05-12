@@ -3,9 +3,9 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <item
-        android:id="@+id/action_creatEvent"
+        android:id="@+id/action_create_event"
+        android:icon="@android:drawable/ic_input_add"
         android:title="Создать событие"
-        android:icon="@android:drawable/ic_menu_preferences"
         app:showAsAction="never" />
 
     <item
@@ -17,7 +17,5 @@
         android:id="@+id/action_about"
         android:title="О приложении"
         app:showAsAction="never" />
-
-
 
 </menu>

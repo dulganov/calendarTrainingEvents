@@ -9,14 +9,17 @@ import androidx.appcompat.widget.Toolbar;
 
 public class EventDetailActivity extends AppCompatActivity {
 
-    private TextView tvDetailTitle, tvDetailDateTime, tvDetailLocation, tvDetailOrganizer, tvDetailDescription;
+    private TextView tvDetailTitle;
+    private TextView tvDetailDateTime;
+    private TextView tvDetailLocation;
+    private TextView tvDetailOrganizer;
+    private TextView tvDetailDescription;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_event_detail);
 
-        // Настройка Toolbar
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
@@ -25,21 +28,18 @@ public class EventDetailActivity extends AppCompatActivity {
             getSupportActionBar().setDisplayShowHomeEnabled(true);
         }
 
-        // Инициализация
         tvDetailTitle = findViewById(R.id.tvDetailTitle);
         tvDetailDateTime = findViewById(R.id.tvDetailDateTime);
         tvDetailLocation = findViewById(R.id.tvDetailLocation);
         tvDetailOrganizer = findViewById(R.id.tvDetailOrganizer);
         tvDetailDescription = findViewById(R.id.tvDetailDescription);
 
-        // Получаем событие из Intent
         Event event = (Event) getIntent().getSerializableExtra("event");
-
         if (event != null) {
             tvDetailTitle.setText(event.getTitle());
-            tvDetailDateTime.setText("📅 " + event.getDateTime());
-            tvDetailLocation.setText("📍 " + event.getLocation());
-            tvDetailOrganizer.setText("💻 " + event.getOrganizer());
+            tvDetailDateTime.setText(event.getDateTime());
+            tvDetailLocation.setText(event.getLocation());
+            tvDetailOrganizer.setText(event.getOrganizer());
             tvDetailDescription.setText(event.getDescription());
         }
     }

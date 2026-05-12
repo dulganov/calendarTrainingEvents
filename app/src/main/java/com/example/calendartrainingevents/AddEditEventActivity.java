@@ -3,7 +3,9 @@ package com.example.calendartrainingevents;
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
+import android.text.InputType;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
@@ -11,31 +13,40 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.Spinner;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
 import com.google.android.material.textfield.TextInputEditText;
 
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.Locale;
 
 public class AddEditEventActivity extends AppCompatActivity {
 
-    private TextInputEditText etTitle, etDate, etTime, etDuration, etLocation, etOrganizer, etDescription;
+    private static final Locale RU_LOCALE = new Locale("ru");
+    private static final SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("dd.MM.yyyy", RU_LOCALE);
+
+    private TextInputEditText etTitle;
+    private TextInputEditText etDate;
+    private TextInputEditText etTime;
+    private TextInputEditText etDuration;
+    private TextInputEditText etLocation;
+    private TextInputEditText etOrganizer;
+    private TextInputEditText etDescription;
     private Spinner spinnerColor;
     private TextView tvColorPreview;
-    private Button btnSave, btnCancel;
 
-    private String selectedColor = "#2196F3"; // цвет по умолчанию
+    private String selectedColor = "#2196F3";
+    private final Calendar selectedCalendar = Calendar.getInstance();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_edit_event);
 
-        // Настройка Toolbar
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
@@ -44,7 +55,6 @@ public class AddEditEventActivity extends AppCompatActivity {
             getSupportActionBar().setDisplayShowHomeEnabled(true);
         }
 
-        // Инициализация полей
         etTitle = findViewById(R.id.etTitle);
         etDate = findViewById(R.id.etDate);
         etTime = findViewById(R.id.etTime);
@@ -54,41 +64,37 @@ public class AddEditEventActivity extends AppCompatActivity {
         etDescription = findViewById(R.id.etDescription);
         spinnerColor = findViewById(R.id.spinnerColor);
         tvColorPreview = findViewById(R.id.tvColorPreview);
-        btnSave = findViewById(R.id.btnSave);
-        btnCancel = findViewById(R.id.btnCancel);
+        Button btnSave = findViewById(R.id.btnSave);
+        Button btnCancel = findViewById(R.id.btnCancel);
 
-        etTitle.setInputType(android.text.InputType.TYPE_CLASS_TEXT |
-                android.text.InputType.TYPE_TEXT_FLAG_CAP_SENTENCES);
-        etLocation.setInputType(android.text.InputType.TYPE_CLASS_TEXT |
-                android.text.InputType.TYPE_TEXT_FLAG_CAP_WORDS);
-        etOrganizer.setInputType(android.text.InputType.TYPE_CLASS_TEXT |
-                android.text.InputType.TYPE_TEXT_FLAG_CAP_WORDS);
-        etDescription.setInputType(android.text.InputType.TYPE_CLASS_TEXT |
-                android.text.InputType.TYPE_TEXT_FLAG_CAP_SENTENCES |
-                android.text.InputType.TYPE_TEXT_FLAG_MULTI_LINE);
+        etTitle.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_FLAG_CAP_SENTENCES);
+        etLocation.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_FLAG_CAP_WORDS);
+        etOrganizer.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_FLAG_CAP_WORDS);
+        etDescription.setInputType(InputType.TYPE_CLASS_TEXT
+                | InputType.TYPE_TEXT_FLAG_CAP_SENTENCES
+                | InputType.TYPE_TEXT_FLAG_MULTI_LINE);
 
-        // Настройка Spinner для выбора цвета
+        long selectedDateMillis = getIntent().getLongExtra("selected_date_millis", System.currentTimeMillis());
+        selectedCalendar.setTimeInMillis(selectedDateMillis);
+        etDate.setText(DATE_FORMAT.format(new Date(selectedDateMillis)));
+        etTime.setText(new SimpleDateFormat("HH:mm", RU_LOCALE).format(new Date()));
+
         setupColorSpinner();
 
-        // Обработчик выбора даты
         etDate.setOnClickListener(v -> showDatePicker());
         etDate.setFocusable(false);
         etDate.setClickable(true);
 
-        // Обработчик выбора времени
         etTime.setOnClickListener(v -> showTimePicker());
         etTime.setFocusable(false);
         etTime.setClickable(true);
 
-        // Кнопка Сохранить
         btnSave.setOnClickListener(v -> saveEvent());
-
-        // Кнопка Отмена
         btnCancel.setOnClickListener(v -> finish());
     }
 
     private void setupColorSpinner() {
-        String[] colors = {"Синий", "Зеленый", "Красный", "Оранжевый", "Фиолетовый"};
+        String[] colors = {"Синий", "Зелёный", "Красный", "Оранжевый", "Фиолетовый"};
         String[] colorValues = {"#2196F3", "#4CAF50", "#F44336", "#FF9800", "#9C27B0"};
 
         ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, colors);
@@ -99,26 +105,26 @@ public class AddEditEventActivity extends AppCompatActivity {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 selectedColor = colorValues[position];
-                tvColorPreview.setBackgroundColor(android.graphics.Color.parseColor(selectedColor));
+                tvColorPreview.setBackgroundColor(Color.parseColor(selectedColor));
             }
 
             @Override
             public void onNothingSelected(AdapterView<?> parent) {
                 selectedColor = "#2196F3";
+                tvColorPreview.setBackgroundColor(Color.parseColor(selectedColor));
             }
         });
     }
 
     private void showDatePicker() {
-        Calendar calendar = Calendar.getInstance();
-        int year = calendar.get(Calendar.YEAR);
-        int month = calendar.get(Calendar.MONTH);
-        int day = calendar.get(Calendar.DAY_OF_MONTH);
+        int year = selectedCalendar.get(Calendar.YEAR);
+        int month = selectedCalendar.get(Calendar.MONTH);
+        int day = selectedCalendar.get(Calendar.DAY_OF_MONTH);
 
         DatePickerDialog datePickerDialog = new DatePickerDialog(this,
-                (view, year1, month1, dayOfMonth) -> {
-                    String date = dayOfMonth + "." + (month1 + 1) + "." + year1;
-                    etDate.setText(date);
+                (view, selectedYear, selectedMonth, dayOfMonth) -> {
+                    selectedCalendar.set(selectedYear, selectedMonth, dayOfMonth);
+                    etDate.setText(DATE_FORMAT.format(selectedCalendar.getTime()));
                 }, year, month, day);
         datePickerDialog.show();
     }
@@ -129,47 +135,49 @@ public class AddEditEventActivity extends AppCompatActivity {
         int minute = calendar.get(Calendar.MINUTE);
 
         TimePickerDialog timePickerDialog = new TimePickerDialog(this,
-                (view, hourOfDay, minute1) -> {
-                    String time = String.format(Locale.getDefault(), "%02d:%02d", hourOfDay, minute1);
+                (view, hourOfDay, selectedMinute) -> {
+                    String time = String.format(RU_LOCALE, "%02d:%02d", hourOfDay, selectedMinute);
                     etTime.setText(time);
                 }, hour, minute, true);
         timePickerDialog.show();
     }
 
     private void saveEvent() {
-        // Получаем данные из полей
-        String title = etTitle.getText() != null ? etTitle.getText().toString().trim() : "";
-        String date = etDate.getText() != null ? etDate.getText().toString().trim() : "";
-        String time = etTime.getText() != null ? etTime.getText().toString().trim() : "";
-        String durationStr = etDuration.getText() != null ? etDuration.getText().toString().trim() : "60";
-        String location = etLocation.getText() != null ? etLocation.getText().toString().trim() : "";
-        String organizer = etOrganizer.getText() != null ? etOrganizer.getText().toString().trim() : "";
-        String description = etDescription.getText() != null ? etDescription.getText().toString().trim() : "";
+        String title = getText(etTitle);
+        String date = getText(etDate);
+        String time = getText(etTime);
+        String durationText = getText(etDuration);
+        String location = getText(etLocation);
+        String organizer = getText(etOrganizer);
+        String description = getText(etDescription);
 
-        int duration = 60;
-        try {
-            duration = Integer.parseInt(durationStr);
-        } catch (NumberFormatException e) {
-            duration = 60;
-        }
-
-        // Проверка на заполнение обязательных полей
         if (title.isEmpty()) {
             etTitle.setError("Введите название события");
             return;
         }
 
-        if (date.isEmpty() || date.equals("Выберите дату")) {
+        if (date.isEmpty()) {
             etDate.setError("Выберите дату");
             return;
         }
 
-        if (time.isEmpty() || time.equals("Выберите время")) {
+        if (time.isEmpty()) {
             etTime.setError("Выберите время");
             return;
         }
 
-        // Создаем новое событие
+        int duration = 60;
+        try {
+            duration = Integer.parseInt(durationText);
+        } catch (NumberFormatException ignored) {
+            duration = 60;
+        }
+
+        if (duration <= 0) {
+            etDuration.setError("Укажите длительность больше 0");
+            return;
+        }
+
         Event newEvent = new Event();
         newEvent.setId((int) System.currentTimeMillis());
         newEvent.setTitle(title);
@@ -178,13 +186,16 @@ public class AddEditEventActivity extends AppCompatActivity {
         newEvent.setOrganizer(organizer.isEmpty() ? "Не указан" : organizer);
         newEvent.setDescription(description.isEmpty() ? "Нет описания" : description);
         newEvent.setDuration(duration);
-        newEvent.setColor(android.graphics.Color.parseColor(selectedColor));
+        newEvent.setColor(Color.parseColor(selectedColor));
 
-        // Возвращаем результат в MainActivity
         Intent resultIntent = new Intent();
         resultIntent.putExtra("new_event", newEvent);
         setResult(RESULT_OK, resultIntent);
         finish();
+    }
+
+    private String getText(TextInputEditText editText) {
+        return editText.getText() == null ? "" : editText.getText().toString().trim();
     }
 
     @Override
